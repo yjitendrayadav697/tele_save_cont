@@ -1,0 +1,17 @@
+# Core bot framework
+pyrogram==2.0.106
+TgCrypto==1.2.5
+
+# Async MongoDB driver
+motor==3.3.2
+pymongo==4.6.3
+
+# Session encryption at rest
+cryptography==42.0.5
+
+# Web server (for Koyeb/Heroku keep-alive)
+flask==3.0.3
+gunicorn==22.0.0
+
+# Environment variable loading
+python-dotenv==1.0.1
