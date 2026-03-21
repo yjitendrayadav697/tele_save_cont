@@ -18,7 +18,7 @@ from config import ADMINS, CHANNEL_ID, WAITING_TIME, ERROR_MESSAGE
 from rate_limiter import can_proceed, release
 from validators import validate_link
 from bot import TechVJUser
-from database.users_db import get_user_session, is_user_logged_in
+from users_db import get_user_session, is_user_logged_in
 
 logger = logging.getLogger(__name__)
 
