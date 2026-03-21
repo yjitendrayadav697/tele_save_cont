@@ -34,7 +34,7 @@ class Bot(Client):
             api_id=API_ID,
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
-            plugins=dict(root="TechVJ"),
+            plugins=dict(root="."),  # since files are in root
             # Reduced from 150 → 20 to limit flood risk and resource abuse
             workers=20,
             # Give Telegram more breathing room before raising flood errors
