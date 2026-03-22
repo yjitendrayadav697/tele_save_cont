@@ -10,7 +10,7 @@ from pyrogram.types import Message
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked
 
 from config import ADMINS
-from database.users_db import get_all_users
+from users_db import get_all_users
 
 logger = logging.getLogger(__name__)
 
