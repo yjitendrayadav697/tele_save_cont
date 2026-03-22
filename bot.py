@@ -12,8 +12,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ── User client (only when LOGIN_SYSTEM is disabled) ──────────────────────────
-TechVJUser: Client | None = None
+TechVJUser = None
 
 if not LOGIN_SYSTEM:
     if not STRING_SESSION:
@@ -25,44 +24,26 @@ if not LOGIN_SYSTEM:
         session_string=STRING_SESSION,
     )
 
+app = Client(
+    "techvj_bot",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN,
+    workers=20,
+    sleep_threshold=30,
+)
 
-# ── Bot client ────────────────────────────────────────────────────────────────
-class Bot(Client):
-    def __init__(self):
-        super().__init__(
-            "techvj_bot",
-            api_id=API_ID,
-            api_hash=API_HASH,
-            bot_token=BOT_TOKEN,
-            plugins=dict(root="."),  # since files are in root
-            # Reduced from 150 → 20 to limit flood risk and resource abuse
-            workers=20,
-            # Give Telegram more breathing room before raising flood errors
-            sleep_threshold=30,
-        )
+import TechVJ_login
+import TechVJ_save
+import broadcast
 
-    async def start(self):
-        await super().start()
-        me = await self.get_me()
-        logger.info(f"Bot started: @{me.username} (ID: {me.id})")
-
-        # Start the user client alongside the bot if needed
-        if TechVJUser is not None:
+async def main():
+    async with app:
+        me = await app.get_me()
+        logger.info(f"Bot started: @{me.username}")
+        if TechVJUser:
             await TechVJUser.start()
-            user_me = await TechVJUser.get_me()
-            logger.info(f"User client started: @{user_me.username} (ID: {user_me.id})")
-
-    async def stop(self, *args):
-        if TechVJUser is not None:
-            try:
-                await TechVJUser.stop()
-                logger.info("User client stopped.")
-            except Exception as e:
-                logger.warning(f"Error stopping user client: {e}")
-        await super().stop()
-        logger.info("Bot stopped.")
-
+        await asyncio.Event().wait()
 
 if __name__ == "__main__":
-    bot = Bot()
-    bot.run()
+    app.run(main())
